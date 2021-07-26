@@ -7,15 +7,17 @@ Parameters:
     Type: String
 
 Resources:
+
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "udapeople-${ID}"
+      # BucketName: !Sub "udapeople-${ID}"
+      BucketName: "udapeople-bucket"
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: 404.html
-  
+
   WebsiteBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -25,8 +27,9 @@ Resources:
         - Sid: PublicReadForGetBucketObjects
           Effect: Allow
           Principal: '*'
-          Action: s3:GetObject
+          Action: s3:GetObjecgitt
           Resource: !Join ['', ['arn:aws:s3:::', !Ref 'WebsiteBucket', /*]]
+
 
 # Outputs:
 #   WebsiteURL:
