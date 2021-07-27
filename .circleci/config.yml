@@ -218,12 +218,12 @@ jobs:
             # Your code here
             apk add --update ansible
             # exit 1
-      # - run:
-      #     name: install aws-cli
-      #     commando: |
-      #       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      #       unzip awscliv2.zip
-      #       ./aws/install
+      - run:
+          name: install aws-cli
+          commando: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            ./aws/install
       - run:
           name: Configure server
           command: |
