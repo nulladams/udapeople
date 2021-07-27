@@ -11,8 +11,8 @@ Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      # BucketName: !Sub "udapeople-${ID}"
-      BucketName: "udapeople-bucket"
+      BucketName: !Sub "udapeople-${ID}"
+      # BucketName: "udapeople-bucket"
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
@@ -31,7 +31,7 @@ Resources:
           Resource: !Join ['', ['arn:aws:s3:::', !Ref 'WebsiteBucket', /*]]
 
 
-# Outputs:
-#   WebsiteURL:
-#     Value: !GetAtt WebsiteBucket.WebsiteURL
-#     Description: URL for website hosted on S3
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt WebsiteBucket.WebsiteURL
+    Description: URL for website hosted on S3
