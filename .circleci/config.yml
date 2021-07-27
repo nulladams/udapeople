@@ -222,7 +222,8 @@ jobs:
           name: Configure server
           command: |
             # Your code here
-            ansible-playbook -i project/.circleci/ansible/inventory.txt project/.circleci/ansible/configure-server.yml 
+            ls -la
+            ansible-playbook -i inventory.txt configure-server.yml 
             # exit 1
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
