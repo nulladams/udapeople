@@ -11,7 +11,7 @@ Resources:
   WebsiteBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "udapeople-bubket-${ID}"
+      BucketName: !Sub "udapeople-bucket-${ID}"
       #BucketName: !Sub "${ID}"
       AccessControl: PublicRead
       WebsiteConfiguration:
