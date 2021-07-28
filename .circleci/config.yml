@@ -189,7 +189,7 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --query "Reservations[*].Instances[*].PublicIpAddress" \
               --output text >> .circleci/ansible/inventory.txt
-          
+            cat inventory.txt
             # exit 1
       - persist_to_workspace:
           root: ~/
@@ -245,13 +245,19 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
+          name: install aws-cli
+          command: |
+            apk add --update python
+            python --version
+            python -m pip install awscli
+      - run:
           name: Run migrations
           command: |
             # Your code here
             cd backend
             npm install
-            npm run premigrations
             npm run migrations >> migrations.txt
+            cat migrations.txt
             # exit 1
       - run:
           name: Send migration results to memstash
@@ -265,7 +271,9 @@ jobs:
               curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "0" https://api.memstash.io/values/MIGRATION_STATUS
             fi
             # exit 1
-     # Here's where you will add some code to rollback on failure      
+     # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
 
 #   deploy-frontend:
 #     docker:
