@@ -23,20 +23,25 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      # Add parameter here
+      workflow_id:
+        type: string
     steps:
       - run:
           name: Revert migrations
           # Add when this will run
+          when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
+            # SUCCESS = 1
+            SUCCESS = $( curl -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request GET https://api.memstash.io/values/MIGRATION_STATUS-<< parameters.workflow_id >> )
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
+              cd ~/project/backend
+              npm install
             #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
+              npm run migrations:revert
+            #  exit 1
             fi
             
 jobs:
@@ -236,7 +241,9 @@ jobs:
             # exit 1
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}      
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}  
 
   run-migrations:
     docker:
@@ -278,10 +285,13 @@ jobs:
             else
               curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "0" https://api.memstash.io/values/MIGRATION_STATUS-${CIRCLE_WORKFLOW_ID:0:7}
             fi
+            
             # exit 1
      # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
   deploy-frontend:
     docker:
@@ -317,7 +327,6 @@ jobs:
             npm install
             npm run build
             aws s3 sync ./dist s3://udapeople-bucket-${CIRCLE_WORKFLOW_ID:0:7}
-
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
