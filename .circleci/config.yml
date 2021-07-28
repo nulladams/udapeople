@@ -263,7 +263,7 @@ jobs:
             # Your code here
             cd backend
             npm install
-            nom run build
+            npm run build
             npm run migrations >> migrations.txt
             cat migrations.txt
             # exit 1
