@@ -249,7 +249,7 @@ jobs:
           command: |
             sudo apt-get -y update
             sudo apt-get -y install python \
-              python-pip
+              python-pip \
               python-setuptools \
               curl
             pip install
