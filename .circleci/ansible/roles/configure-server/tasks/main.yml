@@ -12,6 +12,12 @@
     state: latest
     update_cache: yes
 
+- name: "install npm packages."
+  become: true
+  command: npm install
+  args:
+    chdir: /home/ubuntu/backend
+
 - name: "install pm2"
   become: true
   npm:
