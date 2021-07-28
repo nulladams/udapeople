@@ -314,7 +314,6 @@ jobs:
           command: |
             # your code here
             cd frontend
-            cat .env
             npm install
             npm run build
             aws s3 sync ./dist s3://udapeople-bucket-${CIRCLE_WORKFLOW_ID:0:7} --recursive
