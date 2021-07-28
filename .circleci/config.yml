@@ -166,7 +166,7 @@ jobs:
           command: |
             yum -y install tar gzip
       - run:
-          name: Ensure back-end infrastructure exists
+          name: Ensure backend infrastructure exists
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
@@ -175,7 +175,7 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
           # exit 1
       - run:
-          name: Ensure front-end infrastructure exist
+          name: Ensure frontend infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
@@ -263,6 +263,7 @@ jobs:
             # Your code here
             cd backend
             npm install
+            nom run build
             npm run migrations >> migrations.txt
             cat migrations.txt
             # exit 1
@@ -273,9 +274,9 @@ jobs:
             cd backend
             if grep -q "has been executed successfully" migrations.txt
             then
-              curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "1" https://api.memstash.io/values/MIGRATION_STATUS
+              curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "1" https://api.memstash.io/values/MIGRATION_STATUS-${CIRCLE_WORKFLOW_ID:0:7}
             else
-              curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "0" https://api.memstash.io/values/MIGRATION_STATUS
+              curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "0" https://api.memstash.io/values/MIGRATION_STATUS-${CIRCLE_WORKFLOW_ID:0:7}
             fi
             # exit 1
      # Here's where you will add some code to rollback on failure
@@ -294,6 +295,8 @@ jobs:
           command: |
             # your code here
             yum -y install tar gzip
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs
       - restore_cache:
           keys: [frontend-build]
       - attach_workspace:
@@ -310,6 +313,12 @@ jobs:
           name: Deploy frontend objects
           command: |
             # your code here
+            cd frontend
+            cat .env
+            npm install
+            npm run build
+            aws s3 sync ./dist s3://udapeople-bucket-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
