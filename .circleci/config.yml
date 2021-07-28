@@ -263,7 +263,6 @@ jobs:
             npm run migrations >> migrations.txt
             cat migrations.txt
             # exit 1
-          no_output_timeout: 30m
       - run:
           name: Send migration results to memstash
           command: |
