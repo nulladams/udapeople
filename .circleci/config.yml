@@ -245,7 +245,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: install aws-cli
+          name: install dependencies
           command: |
             apk add --update python
             python --version
