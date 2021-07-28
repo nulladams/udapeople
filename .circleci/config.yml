@@ -221,7 +221,6 @@ jobs:
       - run:
           name: install aws-cli
           command: |
-            apk add --update curl
             apk add --update python
             python --version
             python -m pip install awscli
