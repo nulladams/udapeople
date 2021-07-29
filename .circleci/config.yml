@@ -228,6 +228,7 @@ jobs:
           command: |
             # Your code here
             apk add --update ansible
+            apk add --update curl
             # exit 1
       - run:
           name: install aws-cli

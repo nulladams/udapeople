@@ -19,7 +19,6 @@
   apt:
     name: ["nodejs", "npm"]
     state: latest
-    global: yes
     update_cache: yes
 
 # - name: "install npm packages."
