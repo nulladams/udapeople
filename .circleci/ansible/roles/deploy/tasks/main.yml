@@ -6,7 +6,7 @@
 
 - name: Copy backend files to EC2 server
   copy:
-    src: ~/project/backend/dest
+    src: ~/project/backend/dist
     dest: ~/backend
 
 - name: Check backend state
