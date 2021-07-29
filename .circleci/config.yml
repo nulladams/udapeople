@@ -377,10 +377,11 @@ jobs:
             cd backend
             ls -la
             npm install
-            # npm audit fix --audit-level=critical --force
+            npm audit fix --audit-level=critical --force
             npm run build
+            ls -la
             cd ..
-            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy_backend.yml
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
