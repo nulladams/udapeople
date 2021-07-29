@@ -361,8 +361,10 @@ jobs:
             # your code here
             apk add --update ansible
             apk add --update curl
-            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
-            apk add --update nodejs
+            apk add --update nodejs nodejs-npm
+            apk add --update python
+            python --version
+            python -m pip install awscli
       - run:
           name: Deploy backend
           command: |
