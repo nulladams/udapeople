@@ -79,6 +79,8 @@ jobs:
           command: |
              # Your code here
              cd backend
+             ls -la
+             echo "before build"
              npm i
              npm run build
              ls -la
@@ -373,8 +375,9 @@ jobs:
             BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
             cd backend
+            ls -la
             npm install
-            npm audit fix --audit-level=critical --force
+            # npm audit fix --audit-level=critical --force
             npm run build
             cd ..
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
