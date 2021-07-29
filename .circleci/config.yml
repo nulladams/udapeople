@@ -323,7 +323,6 @@ jobs:
           name: Deploy frontend objects
           command: |
             # your code here
-            exit 1
             cd frontend
             npm install
             npm run build
