@@ -22,4 +22,4 @@
   shell: |
     cd ~/backend
     ls -la
-    pm2 start npm --name "backend" -- run start 
+    pm2 start main.js -f 

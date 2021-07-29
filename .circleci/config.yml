@@ -143,6 +143,9 @@ jobs:
             cd frontend
             npm install
             npm audit fix --audit-level=critical --force
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
 
   scan-backend:
     docker:
@@ -345,6 +348,8 @@ jobs:
       # Checkout code from git
       - checkout
       # Add ssh keys with fingerprint
+      - restore_cache:
+          keys: [backend-build]
       - add_ssh_keys:
           fingerprints: ["18:60:67:ce:86:cf:95:58:49:ac:ba:85:39:4d:ec:47"]
       # attach workspace
@@ -355,11 +360,19 @@ jobs:
           command: |
             # your code here
             apk add --update ansible
+            apk add --update curl
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            apk add --update nodejs
       - run:
           name: Deploy backend
           command: |
             # your code here
             pwd
+            BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
+            export API_URL="http://${BACKEND_IP}:3030"
+            npm install
+            npm audit fix --audit-level=critical --force
+            npm run build
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
