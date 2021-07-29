@@ -1,0 +1,25 @@
+
+- name: Create directory
+  file:
+    path: ~/backend
+    state: directory
+
+- name: Copy backend files to EC2 server
+  copy:
+    src: /root/project/backend/dest
+    dest: ~/backend
+
+- name: Check backend state
+  shell: ls -la
+  register: backfolder
+
+- name: print backfolder
+  debug:
+    msg: "{{ backfolder.stdout_lines }}"
+
+
+- name: Running backend
+  shell: |
+    cd ~/backend
+    ls -la
+    pm2 start npm --name "backend" -- run start 
