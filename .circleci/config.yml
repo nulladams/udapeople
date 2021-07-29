@@ -372,9 +372,11 @@ jobs:
             pwd
             BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
+            cd backend
             npm install
             npm audit fix --audit-level=critical --force
             npm run build
+            cd ..
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
