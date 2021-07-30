@@ -428,12 +428,14 @@ jobs:
             echo $BACKEND_IP
             ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
-            if curl -s ${ULR_BACKEND}
-            then
-              return 0
-            else
-              return 1
-            fi
+            echo curl -s ${ULR_BACKEND}
+            echo curl -s ${ULR_BACKEND}
+            # if curl -s "http://${BACKEND_IP}:3030/api/status"
+            # then
+            #   return 0
+            # else
+            #   return 1
+            # fi
 
       
       # Here's where you will add some code to rollback on failure
