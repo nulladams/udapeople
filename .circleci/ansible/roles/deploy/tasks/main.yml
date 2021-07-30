@@ -43,7 +43,7 @@
     msg: "{{ distfolder.stdout_lines }}"
   
 - name: Running backend
-    shell: |
-      cd ~/backend/dist
-      pm2 start npm --name backend -- start
-      #pm2 start main.js -f
+  shell: |
+    cd ~/backend/dist
+    pm2 start npm --name backend -- start
+    #pm2 start main.js -f
