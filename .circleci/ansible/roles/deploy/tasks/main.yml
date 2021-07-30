@@ -31,8 +31,21 @@
 - name: print backfolder
   debug:
     msg: "{{ backfolder.stdout_lines }}"
+
+- name: check dist folder
+  shell: |
+    cd ~/backend/dist
+    ls -la
+  register: distfolder
+
+- name: print distfolder
+  debug:
+    msg: "{{ distfolder.stdout_lines }}"
   
 - name: Running backend
   shell: |
+
+    
     cd ~/backend/dist
-    pm2 start main.js -f 
+    pm2 start npm --name backend -- start
+    #pm2 start main.js -f 

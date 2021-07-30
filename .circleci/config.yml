@@ -373,6 +373,7 @@ jobs:
             # your code here
             ENV_PATH="/root/project/backend/.env"
             echo NODE_ENV=production >> $ENV_PATH
+            echo ENVIRONMENT=production > $ENV_PATH
             echo TYPEORM_CONNECTION=postgres >> $ENV_PATH
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $ENV_PATH
             echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> $ENV_PATH
@@ -442,7 +443,7 @@ jobs:
             ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
             echo curl -s ${ULR_BACKEND}
-            echo curl -s "http://${BACKEND_IP}:3030/api/status"
+            echo curl "http://${BACKEND_IP}:3030/api/status"
             # if curl -s ${ULR_BACKEND}
             # then
             #   return 0
