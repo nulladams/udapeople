@@ -371,7 +371,7 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
-            ENV_PATH = "/root/project/backend/.env"
+            ENV_PATH="/root/project/backend/.env"
             echo NODE_ENV=production >> $ENV_PATH
             echo TYPEORM_CONNECTION=postgres >> $ENV_PATH
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $ENV_PATH
