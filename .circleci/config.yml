@@ -407,7 +407,8 @@ jobs:
           name: Get backend url
           command: |
             # your code here
-            BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
+            export BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
+            echo $BACKEND_IP
       - run:
           name: Frontend smoke test.
           command: |
