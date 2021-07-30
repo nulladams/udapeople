@@ -371,9 +371,22 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
+            ENV_PATH = "/root/project/backend/.env"
+            echo NODE_ENV=production >> $ENV_PATH
+            echo TYPEORM_CONNECTION=postgres >> $ENV_PATH
+            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $ENV_PATH
+            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> $ENV_PATH
+            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> $ENV_PATH
+            echo TYPEORM_HOST=$TYPEORM_HOST >> $ENV_PATH
+            echo TYPEORM_PORT=$TYPEORM_PORT >> $ENV_PATH
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> $ENV_PATH
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> $ENV_PATH
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> $ENV_PATH
+            cat /root/project/backend/.env
             pwd
             BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_IP}:3030"
+            echo $API_URL
             cd backend
             ls -la
             npm install
@@ -429,8 +442,8 @@ jobs:
             ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
             echo curl -s ${ULR_BACKEND}
-            echo curl -s ${ULR_BACKEND}
-            # if curl -s "http://${BACKEND_IP}:3030/api/status"
+            echo curl -s "http://${BACKEND_IP}:3030/api/status"
+            # if curl -s ${ULR_BACKEND}
             # then
             #   return 0
             # else
