@@ -409,18 +409,6 @@ jobs:
             # your code here
             BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
       - run:
-          name: Backend smoke test.
-          command: |
-            # your code here
-            ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
-            if curl -s ${ULR_BACKEND}
-            then
-              return 0
-            else
-              return 1
-            fi
-
-      - run:
           name: Frontend smoke test.
           command: |
             # your code here
@@ -431,6 +419,21 @@ jobs:
             else
               return 1
             fi
+      - run:
+          name: Backend smoke test.
+          command: |
+            # your code here
+            echo $BACKEND_IP
+            ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
+            echo ${ULR_BACKEND}
+            if curl -s ${ULR_BACKEND}
+            then
+              return 0
+            else
+              return 1
+            fi
+
+      
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
