@@ -424,6 +424,7 @@ jobs:
           name: Backend smoke test.
           command: |
             # your code here
+            BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
             echo $BACKEND_IP
             ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
