@@ -10,7 +10,7 @@
     dest: ~/backend
 
 - name: Copy env file
-  tamplate:
+  template:
     src: ~/project/backend/.env
     dest: ~/backend/.env
 
