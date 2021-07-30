@@ -219,6 +219,15 @@ jobs:
     docker:
       # Docker image here that supports Ansible
       - image: python:3.7-alpine3.11
+        environment:
+          ENVIRONMENT: production
+          TYPEORM_CONNECTION: $TYPEORM_CONNECTION
+          TYPEORM_HOST: $TYPEORM_HOST
+          TYPEORM_USERNAME: $TYPEORM_USERNAME
+          TYPEORM_PASSWORD: $TYPEORM_PASSWORD
+          TYPEORM_DATABASE: $TYPEORM_DATABASE
+          TYPEORM_MIGRATIONS: $TYPEORM_MIGRATIONS
+          TYPEORM_ENTITIES: $TYPEORM_ENTITIES
     steps:
       # Checkout code from git
       - checkout
@@ -372,8 +381,8 @@ jobs:
           command: |
             # your code here
             ENV_PATH="/root/project/backend/.env"
-            echo NODE_ENV=production >> $ENV_PATH
-            echo ENVIRONMENT=production > $ENV_PATH
+            # echo NODE_ENV=production >> $ENV_PATH
+            echo ENVIRONMENT=production >> $ENV_PATH
             echo TYPEORM_CONNECTION=postgres >> $ENV_PATH
             echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $ENV_PATH
             echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> $ENV_PATH
@@ -390,11 +399,12 @@ jobs:
             echo $API_URL
             cd backend
             ls -la
-            npm install
+            # npm install
             # npm audit fix --audit-level=critical --force
-            npm run build
+            # npm run build
             ls -la
             cd ..
+            tar cvzf backend.tar.gz backend
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
@@ -442,8 +452,8 @@ jobs:
             echo $BACKEND_IP
             ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
-            echo curl -s ${ULR_BACKEND}
-            echo curl "http://${BACKEND_IP}:3030/api/status"
+            curl -s ${ULR_BACKEND}
+            curl "http://${BACKEND_IP}:3030/api/status"
             # if curl -s ${ULR_BACKEND}
             # then
             #   return 0
