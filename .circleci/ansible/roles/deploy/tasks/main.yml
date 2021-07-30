@@ -9,6 +9,11 @@
     src: ~/project/backend/dist
     dest: ~/backend
 
+- name: Copy env file
+  tamplate:
+    src: ~/project/backend/.env
+    dest: ~/backend/.env
+
 - name: Check backend state
   shell: ls -la
   register: backstate
