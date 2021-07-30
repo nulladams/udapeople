@@ -413,7 +413,7 @@ jobs:
           command: |
             # your code here
             ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
-            if curl -s ULR_BACKEND
+            if curl -s ${ULR_BACKEND}
             then
               return 0
             else
