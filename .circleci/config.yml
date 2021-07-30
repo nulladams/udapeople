@@ -452,8 +452,8 @@ jobs:
             echo $BACKEND_IP
             ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
-            curl -s ${ULR_BACKEND}
-            curl "http://${BACKEND_IP}:3030/api/status"
+            #curl -s ${ULR_BACKEND}
+            # curl "http://${BACKEND_IP}:3030/api/status"
             # if curl -s ${ULR_BACKEND}
             # then
             #   return 0
