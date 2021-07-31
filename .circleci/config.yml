@@ -346,6 +346,9 @@ jobs:
           name: Deploy frontend objects
           command: |
             # your code here
+            awk 'NR==2' .circleci/ansible/inventory.txt
+            BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
+            export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             cd frontend
             npm install
