@@ -17,7 +17,7 @@ commands:
             aws s3 rm s3://udapeople-bucket-<< parameters.workflow_id >> --recursive
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_id >>
-            aws cloudformation delete-stack --stack-name "udapeople-cloudfront-"<< parameters.workflow_id >>
+            aws cloudformation delete-stack --stack-name udapeople-cloudfront-<< parameters.workflow_id >>
             
             # exit 1
 
@@ -333,15 +333,15 @@ jobs:
           keys: [frontend-build]
       - attach_workspace:
           at: ~/
-      - run:
-          name: Get backend url
-          command: |
-            # your code here
-            cat .circleci/ansible/inventory.txt
-            awk 'NR==2' .circleci/ansible/inventory.txt
-            BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
-            export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
+      # - run:
+      #     name: Get backend url
+      #     command: |
+      #       # your code here
+      #       cat .circleci/ansible/inventory.txt
+      #       awk 'NR==2' .circleci/ansible/inventory.txt
+      #       BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
+      #       export API_URL="http://${BACKEND_IP}:3030"
+      #       echo "${API_URL}"
       - run:
           name: Deploy frontend objects
           command: |
@@ -506,7 +506,6 @@ jobs:
               --stack-name "udapeople-cloudfront-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameters-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
-            aws cloudformation deploy \
       # Here's where you will add some code to rollback on failure
       # - destroy-environment:
       #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -562,7 +561,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - cloudfront-update:
+          requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
