@@ -229,6 +229,9 @@ jobs:
           TYPEORM_DATABASE: $TYPEORM_DATABASE
           TYPEORM_MIGRATIONS: $TYPEORM_MIGRATIONS
           TYPEORM_ENTITIES: $TYPEORM_ENTITIES
+          TYPEORM_MIGRATIONS_DIR: $TYPEORM_MIGRATIONS_DIR
+          TYPEORM_PORT: $TYPEORM_PORT
+
     steps:
       # Checkout code from git
       - checkout
@@ -356,6 +359,17 @@ jobs:
     docker:
       # Docker image here that supports Ansible
       - image: python:3.7-alpine3.11
+        environment:
+            ENVIRONMENT: production
+            TYPEORM_CONNECTION: $TYPEORM_CONNECTION
+            TYPEORM_HOST: $TYPEORM_HOST
+            TYPEORM_USERNAME: $TYPEORM_USERNAME
+            TYPEORM_PASSWORD: $TYPEORM_PASSWORD
+            TYPEORM_DATABASE: $TYPEORM_DATABASE
+            TYPEORM_MIGRATIONS: $TYPEORM_MIGRATIONS
+            TYPEORM_ENTITIES: $TYPEORM_ENTITIES
+            TYPEORM_MIGRATIONS_DIR: $TYPEORM_MIGRATIONS_DIR
+            TYPEORM_PORT: $TYPEORM_PORT
     steps:
       # Checkout code from git
       - checkout
@@ -384,10 +398,10 @@ jobs:
             ENV_PATH="/root/project/backend/.env"
             # echo NODE_ENV=production >> $ENV_PATH
             echo ENVIRONMENT=production >> $ENV_PATH
-            echo TYPEORM_CONNECTION=postgres >> $ENV_PATH
-            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> $ENV_PATH
-            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> $ENV_PATH
-            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> $ENV_PATH
+            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> $ENV_PATH
+            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> $ENV_PATH
+            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> $ENV_PATH
+            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> $ENV_PATH
             echo TYPEORM_HOST=$TYPEORM_HOST >> $ENV_PATH
             echo TYPEORM_PORT=$TYPEORM_PORT >> $ENV_PATH
             echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> $ENV_PATH
@@ -452,8 +466,9 @@ jobs:
             # your code here
             BACKEND_IP=$(awk 'NR==2' .circleci/ansible/inventory.txt)
             echo $BACKEND_IP
-            ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
+            ULR_BACKEND="http://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
+            # curl ULR_BACKEND
             # if curl -s ${ULR_BACKEND}
             # then
             #   return 0
