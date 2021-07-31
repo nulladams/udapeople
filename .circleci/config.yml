@@ -473,14 +473,13 @@ jobs:
             echo $BACKEND_IP
             ULR_BACKEND="http://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
-            curl $ULR_BACKEND
-            # curl ULR_BACKEND
-            # if curl -s ${ULR_BACKEND}
-            # then
-            #   return 0
-            # else
-            #   return 1
-            # fi
+            curl -s $ULR_BACKEND
+            if curl -s ${ULR_BACKEND}
+            then
+              return 0
+            else
+              return 1
+            fi
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
