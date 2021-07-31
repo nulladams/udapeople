@@ -17,7 +17,8 @@ commands:
             aws s3 rm s3://udapeople-bucket-<< parameters.workflow_id >> --recursive
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_id >>
-
+            aws cloudformation delete-stack --stack-name "udapeople-cloudfront-"<< parameters.workflow_id >>
+            
             # exit 1
 
   revert-migrations:
@@ -452,36 +453,45 @@ jobs:
             echo $BACKEND_IP
             ULR_BACKEND="https://${BACKEND_IP}:3030/api/status"
             echo ${ULR_BACKEND}
-            #curl -s ${ULR_BACKEND}
-            # curl "http://${BACKEND_IP}:3030/api/status"
-            # if curl -s ${ULR_BACKEND}
-            # then
-            #   return 0
-            # else
-            #   return 1
-            # fi
-
-      
+            if curl -s ${ULR_BACKEND}
+            then
+              return 0
+            else
+              return 1
+            fi
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
-#   cloudfront-update:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Update cloudfront distribution
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  cloudfront-update:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            # your code here
+            aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront \
+              --stack-name "udapeople-cloudfront-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameters-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
+            aws cloudformation deploy \
+      # Here's where you will add some code to rollback on failure
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      # - revert-migrations:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+
 
 # cleanup:
 #     docker:
