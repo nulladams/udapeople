@@ -303,9 +303,9 @@ jobs:
             cd backend
             if grep -q "has been executed successfully" migrations.txt
             then
-              curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "1" https://api.memstash.io/values/MIGRATION_STATUS-${CIRCLE_WORKFLOW_ID:0:7}
+              curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "1" "https://api.memstash.io/values/MIGRATION_STATUS-${CIRCLE_WORKFLOW_ID:0:7}"
             else
-              curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "0" https://api.memstash.io/values/MIGRATION_STATUS-${CIRCLE_WORKFLOW_ID:0:7}
+              curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "0" "https://api.memstash.io/values/MIGRATION_STATUS-${CIRCLE_WORKFLOW_ID:0:7}"
             fi
 
             # exit 1
@@ -536,7 +536,7 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            export OldWorkflowID=$(curl -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request GET https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7})
+            export OldWorkflowID=$(curl -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request GET "https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7}")
 
             echo $OldWorkflowID
 
@@ -560,7 +560,7 @@ jobs:
 
             echo $CurrentWorkflowID
 
-            curl -H "Content-Type: text/plain" -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request PUT --data "${CurrentWorkflowID}" https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7}
+            curl -H "Content-Type: text/plain" -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request PUT --data "${CurrentWorkflowID}" "https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7}""
             
 
 workflows:
