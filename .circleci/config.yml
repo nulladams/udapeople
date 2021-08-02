@@ -540,8 +540,8 @@ jobs:
           name: Remove old stacks and files
           command: |
             # export OldWorkflowID=$(curl -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request GET "https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7}")
-            export OldWorkflowID=$(curl -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request GET https://api.memstash.io/values/WORKFLOW_ID)
-
+            # export OldWorkflowID=$(curl -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request GET https://api.memstash.io/values/WORKFLOW_ID)
+            export OldWorkflowID=$(curl -H "token: 6565d081-431b-4b27-851d-c7a0d8bd7018" --request GET https://api.memstash.io/values/WORKFLOW_ID)
             echo $OldWorkflowID
 
             export STACKS=($(aws cloudformation list-stacks \
@@ -565,8 +565,8 @@ jobs:
             echo $CurrentWorkflowID
 
             # curl -H "Content-Type: text/plain" -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request PUT --data "${CurrentWorkflowID}" "https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7}"
-            curl -H "Content-Type: text/plain" -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request PUT --data "${CurrentWorkflowID}" https://api.memstash.io/values/WORKFLOW_ID
-            
+            # curl -H "Content-Type: text/plain" -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request PUT --data "${CurrentWorkflowID}" https://api.memstash.io/values/WORKFLOW_ID
+            curl -H "Content-Type: text/plain" -H "token: 6565d081-431b-4b27-851d-c7a0d8bd7018" --request PUT --data "${CurrentWorkflowID}" https://api.memstash.io/values/WORKFLOW_ID            
 
 workflows:
   default:
