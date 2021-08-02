@@ -536,21 +536,31 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            export OldWorkflowID=$(aws cloudformation \
-            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-            --no-paginate --output text)
+            export OldWorkflowID=$(curl -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request GET https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7})
+
+            echo $OldWorkflowID
 
             export STACKS=($(aws cloudformation list-stacks \
             --query "StackSummaries[*].StackName" \
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
 
+            echo $STACKS
+
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
               # your code here
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
+              aws s3 rm "s3://udapeople-bucket-${OldWorkflowID}" --recursive
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
             fi
+
+            CurrentWorkflowID=$(aws cloudformation \
+            list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+            --no-paginate --output text)
+
+            echo $CurrentWorkflowID
+
+            curl -H "Content-Type: text/plain" -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request PUT --data "${CurrentWorkflowID}" https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7}
             
 
 workflows:
