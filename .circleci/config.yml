@@ -35,7 +35,7 @@ commands:
               exit 1
             fi
 
-  slack/notify:
+  slack-fail-notification:
     description: send notification to slack when any job fail
     steps:
       - slack/notify:
@@ -86,7 +86,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-      - slack/notify
+      - slack-fail-notification
 
   test-frontend:
     docker:
