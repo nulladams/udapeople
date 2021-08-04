@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.4.2
+
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -45,7 +48,17 @@ commands:
               npm run migrations:revert
             #  exit 1
             fi
-            
+    
+  slack-fail-notification:
+    description: send notification to slack when any job fail
+    steps:
+      - slack/notify:
+          #channel: cicd-pipeline
+          event: fail
+          template: basic_fail_1
+    
+
+
 jobs:
   build-frontend:
     docker:
@@ -93,6 +106,7 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      - slack-fail-notification
 
   test-frontend:
     docker:
@@ -215,7 +229,9 @@ jobs:
             - project/.circleci/ansible/inventory.txt
 #       # Here's where you will add some code to rollback on failure
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}     
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - slack-fail-notification
+
 
   configure-infrastructure:
     docker:
@@ -571,7 +587,8 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
+      - build-frontend:
+          context: slack-secrets
       - build-backend
       - test-frontend:
           requires: [build-frontend]
