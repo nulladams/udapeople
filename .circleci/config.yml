@@ -485,7 +485,7 @@ jobs:
           command: |
             # your code here
             # URL_FRONTEND="http://udapeople-bucket-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"
-            URL_FRONTEND="http://udapeople-bucket-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonawsxx.com"
+            URL_FRONTEND="http://udapeople-bucket-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com"
             if curl -s ${URL_FRONTEND} | grep "Welcome"
             then
               return 0
