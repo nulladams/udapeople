@@ -40,8 +40,12 @@ commands:
             # SUCCESS=1
             # SUCCESS=$( curl -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request GET https://api.memstash.io/values/MIGRATION_STATUS-<< parameters.workflow_id >> )
             SUCCESS=$(curl -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request GET https://api.memstash.io/values/MIGRATION_STATUS)
-            if (( $SUCCESS==1 )); 
+            echo $SUCCESS
+            if (( $SUCCESS==0 )); 
             then
+              pwd
+              ls -la
+              echo "enter"
               cd ~/project/backend
               npm install
             #  Add revert code here. You can find this in the Getting Started section.
@@ -318,6 +322,8 @@ jobs:
           command: |
             # Your code here
             cd backend
+            ls -la
+            cat migrations.txt
             if grep -q "has been executed successfully" migrations.txt
             then
               # curl -H "Content-Type: text/plain" -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request PUT --data "1" "https://api.memstash.io/values/MIGRATION_STATUS-${CIRCLE_WORKFLOW_ID:0:7}"
