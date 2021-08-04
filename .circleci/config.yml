@@ -193,7 +193,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum -y install tar gzip
+            yum -y install tar gzip jq
       - run:
           name: Ensure backend infrastructure exists
           command: |
