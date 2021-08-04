@@ -41,7 +41,7 @@ commands:
             # SUCCESS=$( curl -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request GET https://api.memstash.io/values/MIGRATION_STATUS-<< parameters.workflow_id >> )
             SUCCESS=$(curl -H "token: 80c7a853-eb83-4a25-b2b5-b27fa1a277f8" --request GET https://api.memstash.io/values/MIGRATION_STATUS)
             echo $SUCCESS
-            if (( $SUCCESS==0 )); 
+            if [[ $SUCCESS==0 ]]; 
             then
               pwd
               ls -la
