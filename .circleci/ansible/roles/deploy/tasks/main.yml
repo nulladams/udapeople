@@ -1,0 +1,80 @@
+
+- name: "copy backend file"
+  become: true
+  copy:
+    src: /root/project/backend.tar.gz
+    dest: /root
+    force: no
+  
+- name: "extract backend files"
+  become: true
+  shell: |
+    cd /root
+    tar -xzvf backend.tar.gz
+
+- name: "install npm packages"
+  become: true
+  command: npm install
+  args:
+    chdir: /root/backend
+
+- name: "compile npm packages"
+  become: true
+  command: npm run build
+  args:
+    chdir: /root/backend
+
+- name: "start server"
+  become: true
+  command: pm2 start npm -- run start
+  args:
+    chdir: /root/backend/dist
+
+# - name: Create directory
+#   file:
+#     path: ~/backend
+#     state: directory
+
+# - name: Copy backend files to EC2 server
+#   copy:
+#     src: ~/project/backend/dist
+#     dest: ~/backend
+
+# - name: Copy env file
+#   template:
+#     src: ~/project/backend/.env
+#     dest: ~/backend/.env
+
+# - name: Check backend state
+#   shell: ls -la
+#   register: backstate
+
+# - name: print backstate
+#   debug:
+#     msg: "{{ backstate.stdout_lines }}"
+
+# - name: check backend folder
+#   shell: |
+#     cd ~/backend
+#     ls -la
+#   register: backfolder
+
+# - name: print backfolder
+#   debug:
+#     msg: "{{ backfolder.stdout_lines }}"
+
+# - name: check dist folder
+#   shell: |
+#     cd ~/backend/dist
+#     ls -la
+#   register: distfolder
+
+# - name: print distfolder
+#   debug:
+#     msg: "{{ distfolder.stdout_lines }}"
+  
+# - name: Running backend
+#   shell: |
+#     cd ~/backend/dist
+#     pm2 start npm --name backend -- start
+#     #pm2 start main.js -f
