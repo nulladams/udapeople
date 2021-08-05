@@ -578,6 +578,8 @@ jobs:
             # export OldWorkflowID=$(curl -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request GET "https://api.memstash.io/values/WORKFLOW_ID-${CIRCLE_WORKFLOW_ID:0:7}")
             # export OldWorkflowID=$(curl -H "token: 115bef83-3e35-4354-b35f-94be8605ab95" --request GET https://api.memstash.io/values/WORKFLOW_ID)
             export OldWorkflowID=$(curl -H "token: 6565d081-431b-4b27-851d-c7a0d8bd7018" --request GET https://api.memstash.io/values/WORKFLOW_ID)
+            
+            echo "Old Workflow id"
             echo $OldWorkflowID
 
             export STACKS=($(aws cloudformation list-stacks \
@@ -591,6 +593,7 @@ jobs:
               if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
               then
                 # your code here
+                echo "entrei"
                 aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
                 aws s3 rm "s3://udapeople-bucket-${OldWorkflowID}" --recursive
                 aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
