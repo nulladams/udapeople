@@ -524,6 +524,9 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
+            yum -y install tar gzip jq
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs nodejs-npm
       - run:
           name: Update cloudfront distribution
           command: |
