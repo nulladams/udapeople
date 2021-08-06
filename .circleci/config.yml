@@ -197,7 +197,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum -y install tar gzip jq
+            yum -y install tar gzip jq nodejs
       - run:
           name: Ensure backend infrastructure exists
           command: |
